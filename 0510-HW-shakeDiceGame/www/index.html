@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<!--
+  * Please see the included README.md file for license terms and conditions.
+  -->
+<head>
+    <title>Blank Cordova Mobile App Project Template (Lite)</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+    <!-- see http://webdesign.tutsplus.com/tutorials/htmlcss-tutorials/quick-tip-dont-forget-the-viewport-meta-tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <style>
+        /* following two viewport lines are equivalent to the meta viewport statement above, needed for Windows */
+        /* see http://www.quirksmode.org/blog/archives/2014/05/html5_dev_conf.html and http://dev.w3.org/csswg/css-device-adapt/ */
+        @-ms-viewport { width: 100vw ; zoom: 100% ; }  @viewport { width: 100vw ; zoom: 100% ; }
+        @-ms-viewport { user-zoom: fixed ; }           @viewport { user-zoom: fixed ; }
+        #footer{
+            font-size: 30px;
+            color: goldenrod;
+            height: 32px;
+        }
+        body{
+            overflow: hidden; 
+        }
+        img#winnerImg {
+            position: absolute;
+            left: 0px;
+            top: 330px;
+            z-index: 1;
+        }
+        #tieUp{
+            position: absolute;
+            left: 0px;
+            top:0px;
+            z-index: 1;
+        }
+    </style>
+
+    <script src="cordova.js"></script>          <!-- phantom library, needed for Cordova api calls, added during build -->
+    <script src="js/app.js"></script>           <!-- recommended location of your JavaScript code relative to other JS files -->
+    <script src="xdk/init-dev.js"></script>     <!-- normalizes device and document ready events, see README for details -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="js/jquery.mobile-1.3.2.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+	<script src="js/jquery-1.9.1.min.js"></script>
+	<script src="js/jquery.mobile-1.3.2.min.js"></script>
+    <script type="text/javascript" src="js/shake.js"></script>
+    <script type="text/javascript" src="js/all.js"></script>
+</head>
+
+<body>
+   <!-- page1 -->
+	<div id="page1" data-role="page" data-theme="b">		
+		<div data-role="header" >
+			<a onclick="Re()" class="ui-btn-right"><i class="fa fa-lg fa-repeat"  aria-hidden="true"></i></a>
+			<h3>雙人骰子遊戲</h3>
+		</div>		
+		<div data-role="content" align="center">
+			<div id='ResponseDiv'  height="300" style="font-size: 1.5em;">...</div>
+			<fieldset  data-role="controlgroup" data-type="horizontal">
+					<legend  >參賽人數:</legend>
+			     	<input type="radio" name="howMany" id="howMany0" value="0" checked="checked" />
+			     	<label for="howMany0">2人</label>
+			
+			     	<input type="radio" name="howMany" id="howMany1" value="1" disabled />
+			     	<label for="howMany1">3人</label>
+			
+			     	<input type="radio" name="howMany" id="howMany2" value="2" disabled />
+			     	<label for="howMany2">4人</label>
+			
+			     	<input type="radio" name="howMany" id="howMany3" value="3" disabled />
+			     	<label for="howMany3">5人</label>
+			</fieldset>
+<!--參賽名字-->			
+			<div class="ui-grid-a" style="padding:0 5px;">
+				<div class="ui-block-a" >
+					<label for="nameOne" ><i class="fa fa-lg  fa-trophy" aria-hidden="true" style="color:skyblue"></i> 選手一號名字:</label><input type="text" name="txt" id="nameOne" class="txtName" data-clear-btn="true" >
+				</div>
+				<div class="ui-block-b">
+					<label for="nameTwo"><i class="fa fa-lg fa-trophy" aria-hidden="true" style="color:pink"></i> 選手二號名字:</label><input type="text" name="txt" id="nameTwo" class="txtName" data-clear-btn="true" >
+				</div>
+				
+			</div>		
+			<input type='button' id="btnStart"  value='Start Now!!' onclick="self.location='#page2'" data-transition="slidedown" />
+
+	  
+		<canvas id="myCanvas" height="200" width="1000" style="border:2px solid #d3d3d3;visibility:hidden;">Your browser does not support the HTML5 canvas tag.</canvas>
+    </div>					
+	</div><!--end of page1 -->
+<!-- page2 -->    
+<div data-role="page" id="page2" data-title="對決時刻" data-theme="b">
+		<div data-role="header">			
+			<a href="#page1" ><i class="fa fa-lg fa-chevron-left" aria-hidden="true"></i></a>
+			<a onclick="Re()" class="ui-btn-right"><i class="fa fa-lg fa-repeat"  aria-hidden="true"></i></a>
+			<h1>玩家<em id="page2em"></em></h1>
+		</div>
+		<div data-role="content" id="page2Content" align="center">
+			
+		<canvas id="myCanvas2" width="500" height="200">Your browser does not support the HTML5 canvas tag.</canvas>
+            
+    <input type='button' id="btnNext" value='下一位挑戰者' />
+    <input type='button' id="btnSeeWinner" value='看勝負' onclick="self.location.href='#page3'" />
+		</div>		
+	</div><!--end of page2 -->
+<!-- page3 -->
+<div data-role="page" id="page3" data-title="論勝負" data-theme="b" align="center">
+		<div data-role="header">
+            <a onclick="Re()" class="ui-btn-right"><i class="fa fa-lg fa-repeat"  aria-hidden="true"></i></a>
+			<h1>論勝負</h1>
+		</div>
+		<div data-role="content" style="padding:0px;">
+		
+            <canvas id="myCanvas3" width="500" height="140" >Your browser does not support the HTML5 canvas tag.</canvas>
+            <h2 id='result' height="40">三指點螢幕就可以離開本頁面</h2>        
+        </div>
+        <div id='footer'></div>
+	 <input type='button' id="btnRe" value='三指點螢幕重新一局' onclick="Re()" />
+     <img src="js/images/ClubWinner.png" width="100%" height="300" id='winnerImg' class="animated fadeInDownBig">
+     <img src='js/images/%E5%B9%B3%E6%89%8B.png' width="100%" height='248' id='tieUp' class="animated fadeInUpBig"> 
+</div><!--end of page3 -->
+
+<script>
+function DocumentReady()
+        {
+            $("#ResponseDiv").text("Get ready").css('color','#f00');
+//            $('#btnNext').hide();
+            $('#btnWinner').hide();         
+            $('#winnerImg').hide();
+            $('#tieUp').hide();
+        }
+$('#nameOne').on('keyup',nameChange).on('change',page2);
+document.getElementById('nameTwo').addEventListener('keyup',nameChange,false);
+$(document).ready(DocumentReady);
+function Re() {
+    location.reload();
+    window.location.href="#page1";
+//    alert('re有笑');
+};
+    
+//$('#btnRe').on('click',Re); 
+
+    
+function page2(){
+    var one = $("#nameOne").val().toUpperCase();
+    $("#page2em").text(' 1號 '+one);
+ }
+    
+function nameChange() {
+    var one = $("#nameOne").val().toUpperCase();
+    var two = $("#nameTwo").val().toUpperCase();	
+        // alert(one);
+        $("#ResponseDiv").show();
+
+        $("#ResponseDiv").html('<i class="fa fa-trophy" fa-lg aria-hidden="true" style="color:skyblue"></i>'+ one +"<span style='color:gray;'> 對戰 </span> "+'<i class="fa fa-trophy" fa-2x aria-hidden="true" style="color:pink"></i>'+ two);           				
+    }
+//隨機取得兩個選手之點數
+	var point1=Math.floor(Math.random()*6+1);
+	var point2=Math.floor(Math.random()*6+1);
+	var point=[point1,point2];
+    
+document.addEventListener("deviceready",function(){
+        var myShakeEvent = new Shake({
+            threshold: 10
+        });
+        myShakeEvent.start(); 
+
+//畫布canvas2	
+	var c = document.getElementById("myCanvas2");
+    var c2 = c.getContext("2d");
+    var img = document.getElementById("myCanvas");
+
+//alert(point);
+
+function show(i) {	
+			var i;
+			var posxs = 20+(point[i]-1)*160;
+			var posdx = 70;
+			c2.drawImage(img, posxs, 20, 160, 160, posdx, 10, 160, 160);
+		};
+// page2-按鈕下一位玩家   
+$('#btnNext').show('slow').on('click', nextPlayer);
+function nextPlayer(){
+	clear();
+	var two = $("#nameTwo").val().toUpperCase();
+	$("#page2em").text(' 2號 '+two);
+        delay(500);
+        navigator.notification.alert(               
+                    "選手"+two+"搖一搖",
+           function () {                                                
+                delay(1000);
+//                alert('2次姚後面180');
+                
+                window.addEventListener(
+                    'shake', 
+                    function () {
+                        navigator.notification.beep(1);
+                        show(1);
+                        }, 
+                    false);
+                    },
+                    "提示",
+                    "ＧＯ!"
+                );	
+}
+//按下'論輸贏'按鈕後秀出c3畫布
+$('#btnSeeWinner').show('slow').on('click', winnerShow);    
+//var bt=document.getElementById("btnSeeWinner");
+//		bt.addEventListener('click',function(){
+// 			// console.log('1');
+// 			function show() {	
+//			for(var i = 0 ; i< point.length ; i++){
+//				var posxs = 20+(point[i]-1)*160;
+//				var posdx = 70+(i*180);
+//				c3.drawImage(img, posxs, 20, 160, 160, posdx, 10, 160, 160);
+//			}
+//		};
+//	   var	one = $("#nameOne").val().toUpperCase();
+//       var two = $("#nameTwo").val().toUpperCase();
+//		show();
+//		setTimeout(winnerShow,500);
+//		
+//		},false);
+    
+    
+     
+btnStart.addEventListener("click",function(){        
+        var one = $("#nameOne").val().toUpperCase();
+        var two = $("#nameTwo").val().toUpperCase();
+    delay(500);
+            navigator.notification.alert(               
+                    "選手"+one+"搖一搖",
+                    function () {                                                
+                        delay(1500);
+//                     alert('姚後面215');
+                        
+            window.addEventListener(
+                    'shake', 
+                    function () {                        
+                        navigator.notification.beep(1);
+                        show(0);
+                    }, 
+                false);
+                    },
+                    "提示",
+                    "ＧＯ!"
+                );
+//            alert('姚前222');
+        })    
+    })
+        
+    function clear(){
+        var c = document.getElementById("myCanvas2");
+        var c2 = c.getContext("2d");
+        var c2 = c.getContext("2d");
+        c2.clearRect(0, 0, 300, 200);
+    }
+
+
+//show(i)畫出(c2)第1(=i+1)個選手之點數 
+//window.onload = show(0);
+		function show(i) {	
+			var i;
+			var posxs = 20+(point[i]-1)*160;
+			var posdx = 70+(i*180);
+			c2.drawImage(img, posxs, 20, 160, 160, posdx, 10, 160, 160);
+		};
+    
+ //myCanvas3畫出全部選手的骰子點數
+    function showAll() {
+    $("#result").html('<span>'+"本局的骰子點數："+'<br>'+point1+'比'+point2+'<span>');    
+	var i1 = 20+(point1-1)*160;
+	var i2 = 20+(point2-1)*160;
+    var c = document.getElementById("myCanvas3");
+    var c3 = c.getContext("2d");
+    var img = document.getElementById("myCanvas");    
+    c3.drawImage(img, i1, 20, 160, 160, 30, 10, 140,140);
+    c3.drawImage(img, i2, 20, 160, 160, 170, 10, 140,140);
+    
+};
+
+    function delay(value){
+	var now = new Date().getTime();
+	while (new Date().getTime() < now + value) { 
+      /* do nothing */ 
+ 	 // alert("ok1"); 如value=3000,代表在3秒內會一直執行alert
+	}     
+	}   
+    
+
+var one = $("#nameOne").val().toUpperCase();
+var two = $("#nameTwo").val().toUpperCase();
+
+//判斷輸贏
+function winnerShow(){
+    showAll();
+     one = $("#nameOne").val().toUpperCase();
+     two = $("#nameTwo").val().toUpperCase();
+    if(point1-point2>0){
+    	$('#footer').html("本局贏家為： "+one+'!');
+        $('#winnerImg').show();
+    }else if(point1-point2<0){
+    	$('#footer').html("本局贏家為： "+two+'!');
+        $('#winnerImg').show();    
+    }else{
+    	$('#footer').html("本局平手，再戰一局！");
+          $('#tieUp').show();
+        
+    }
+}
+
+	
+</script>
+</body>
+</html>
